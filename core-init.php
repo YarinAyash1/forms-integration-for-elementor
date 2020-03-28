@@ -16,10 +16,7 @@ define('CEFI_CORE_JS',plugins_url( 'assets/js/', __FILE__ ));
 *  Includes
 *
 */ 
-// Load the Functions
-if ( file_exists( CEFI_CORE_INC . 'cefi-core-functions.php' ) ) {
-	require_once CEFI_CORE_INC . 'cefi-core-functions.php';
-}     
+    
 // Load the Integration
 if ( file_exists( CEFI_CORE_INC . 'cefi-integration-elementor.php' ) ) {
 	require_once CEFI_CORE_INC . 'cefi-integration-elementor.php';
