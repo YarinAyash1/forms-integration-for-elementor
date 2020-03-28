@@ -148,6 +148,30 @@ class CEFI_CC extends Action_Base {
 				'description' => __( 'Link for error url', 'elementor-pro' ),
 			]
 		);
+		$widget->add_control(
+			'cefi_cc_createinvoice',
+			[
+				'label' => __( 'Create Invoice', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => __( 'Yes', 'elementor-pro' ),
+				'label_off' => __( 'No', 'elementor-pro' ),
+				'return_value' => 'true',
+				'default' => 'true',
+				'separator' => 'before',
+			]
+		);
+		$widget->add_control(
+			'cefi_cc_redirect',
+			[
+				'label' => __( 'Redirect?', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => __( 'No', 'elementor-pro' ),
+				'label_off' => __( 'Yes', 'elementor-pro' ),
+				'return_value' => 'true',
+				'default' => 'false',
+				'separator' => 'before',
+			]
+		);
 		$widget->end_controls_section();
 	}
 
@@ -163,7 +187,6 @@ class CEFI_CC extends Action_Base {
 
 		if($settings['cefi_cc_terminal'] != '' && $settings['cefi_cc_username'] != '' && $settings['cefi_cc_price'] != ''){
 			$post_response = $this->post( $basic_fields );
-			$this->ajax_handler->add_response_data( 'url', $post_response );	
 		}
 
 	}
@@ -186,6 +209,8 @@ class CEFI_CC extends Action_Base {
 		$data['product_name'] = $settings['cefi_cc_product_name'];
 		$data['SuccessRedirectUrl'] = $settings['cefi_cc_successurl']['url'];
 		$data['ErrorRedirectUrl'] = $settings['cefi_cc_errorurl']['url'];
+		$data['CreateInvoice'] = $settings['cefi_cc_createinvoice'];
+		$data['redirect'] = $settings['cefi_cc_redirect'];
         
 		return $data;
 	}
@@ -193,10 +218,9 @@ class CEFI_CC extends Action_Base {
 	private function post( $json_data ) {
 		$TerminalNumber = $json_data['TerminalNumber']; # Company terminal 
 		$UserName = $json_data['UserName'];   # API User
-		$CreateInvoice = true;  # to Create Invoice (Need permissions to create invoice )
-		$IsIframe = true;   # Iframe or Redirect 
+		$CreateInvoice = $json_data['CreateInvoice'];  # to Create Invoice (Need permissions to create invoice )
+		$IsIframe = $json_data['redirect'];   # Iframe or Redirect 
 		$Operation = $json_data['Operation'];  # = 1 - Bill Only , 2- Bill And Create Token , 3 - Token Only , 4 - Suspended Deal (Order).
-
 		#Create Post Information
 		// Account vars
 		$vars =  array();
@@ -251,17 +275,15 @@ class CEFI_CC extends Action_Base {
 		
 		 
 		# Is Deal OK 
-		if ($exp[0] == "0") 
-		{
+		if ($exp[0] == "0") {
 		  # Iframe or  Redicet User : 
-		  $newurl = "https://secure.cardcom.co.il/External/lowProfileClearing/".$TerminalNumber.".aspx?LowProfileCode=". $exp[1];
-		  if ($IsIframe)
-		  {
-			return $newurl;
-		  }else  // redirect
-		  {
-			header("Location:".$newurl);   
-		  }
+			$newurl = "https://secure.cardcom.co.il/External/lowProfileClearing/".$TerminalNumber.".aspx?LowProfileCode=". $exp[1];
+ 
+			if ($IsIframe)	{
+				$this->ajax_handler->add_response_data( 'url', $newurl );	
+			} else {
+				$this->ajax_handler->add_response_data( 'redirect_url', $newurl );
+			}
 		
 		}
 		# Show Error to developer only
