@@ -1,2 +1,2 @@
-# cardcom-elementor-forms-integration
-Add "After action" to elementor forms - Cardcom payment
+# Froms Integtation to Elementor
+Add "After action" to elementor forms - Integrations

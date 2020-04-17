@@ -35,7 +35,7 @@ class CEFI_CC extends Action_Base {
 			[
 				'label' => __( 'Terminal Number', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
-				'description' => __( 'Enter Terminal Number.', 'elementor' )
+				'description' => __( 'Enter Terminal Number. (required*)', 'elementor' )
 			]
 		);
 
@@ -44,7 +44,7 @@ class CEFI_CC extends Action_Base {
 			[
 				'label' => __( 'Username', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
-				'description' => __( 'Enter your username.', 'elementor' )
+				'description' => __( 'Enter your username. (required*)', 'elementor' )
 			]
 		);
 
@@ -109,7 +109,7 @@ class CEFI_CC extends Action_Base {
 				],
 				'label_block' => true,
 				'render_type' => 'none',
-				'description' => __( 'Enter your price.', 'elementor' ),
+				'description' => __( 'Enter your price. (required*)', 'elementor' ),
 			]
 		);
 
@@ -122,6 +122,7 @@ class CEFI_CC extends Action_Base {
 				'description' => __( 'Enter your product name.', 'elementor' )
 			]
 		);
+
 		$widget->add_control(
 			'cefi_cc_successurl',
 			[
@@ -135,6 +136,7 @@ class CEFI_CC extends Action_Base {
 				'description' => __( 'Link for successul url', 'elementor-pro' ),
 			]
 		);
+
 		$widget->add_control(
 			'cefi_cc_errorurl',
 			[
@@ -148,6 +150,7 @@ class CEFI_CC extends Action_Base {
 				'description' => __( 'Link for error url', 'elementor-pro' ),
 			]
 		);
+
 		$widget->add_control(
 			'cefi_cc_createinvoice',
 			[
@@ -160,6 +163,7 @@ class CEFI_CC extends Action_Base {
 				'separator' => 'before',
 			]
 		);
+
 		$widget->add_control(
 			'cefi_cc_redirect',
 			[
@@ -172,6 +176,7 @@ class CEFI_CC extends Action_Base {
 				'separator' => 'before',
 			]
 		);
+
 		$widget->end_controls_section();
 	}
 
@@ -199,7 +204,8 @@ class CEFI_CC extends Action_Base {
         // form fields 
 		foreach($fields_record as $key => $subscriber){
 			$data['data'][$key] = $subscriber['value'];
-        }
+		}
+		// form settings
         $data['TerminalNumber'] = $settings['cefi_cc_terminal'];
 		$data['UserName'] = $settings['cefi_cc_username'];
 		$data['Operation'] = $settings['cefi_cc_operation'];
@@ -251,15 +257,11 @@ class CEFI_CC extends Action_Base {
 		{
 			// article for invoice vars:  http://kb.cardcom.co.il/article/AA-00244/0
 			$vars['IsCreateInvoice'] = "true";
-			// customer info :
+			// customer info
 			$vars["InvoiceHead.CustName"] = $json_data['data']['name']; // customer name
 			$vars["InvoiceHead.SendByEmail"] = "true"; // will the invoice be send by email to the customer
 			$vars["InvoiceHead.Language"] = $json_data['Languge']; // he or en only
 			$vars["InvoiceHead.Email"] = $json_data['data']['email']; // value that will be return and save in CardCom system
-		
-			// products info 
-		
-			// Line 1
 			$vars["InvoiceLines1.Description"] = $json_data['product_name'];
 			$vars["InvoiceLines1.Price"] = $json_data['price'];
 			$vars["InvoiceLines1.Quantity"] = "1";
@@ -280,8 +282,10 @@ class CEFI_CC extends Action_Base {
 			$newurl = "https://secure.cardcom.co.il/External/lowProfileClearing/".$TerminalNumber.".aspx?LowProfileCode=". $exp[1];
  
 			if ($IsIframe)	{
-				$this->ajax_handler->add_response_data( 'url', $newurl );	
+				$this->ajax_handler->add_response_data( 'cc_url', $newurl );
+
 			} else {
+
 				$this->ajax_handler->add_response_data( 'redirect_url', $newurl );
 			}
 		

@@ -22,8 +22,8 @@ jQuery(function($) {
             if ('undefined' !== typeof response.data.redirect_url) {
                 location.href = response.data.redirect_url;
             }
-            else if ('undefined' !== typeof response.data.url) {
-                $(this).html(`<iframe style="min-height:100vh" src="${response.data.url}"></iframe>`);
+            else if ('undefined' !== typeof response.data.cc_url) {
+                $(this).html(`<iframe style="min-height:100vh" src="${response.data.cc_url}"></iframe>`);
             }
         }
 
