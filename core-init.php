@@ -12,7 +12,7 @@
 if ( ! defined( 'WPINC' ) ) {die;} // end if
 
 // Define Our Constants
-define('FI_CORE_INC' ,dirname( __FILE__ ).'inc/');
+define('FI_CORE_INC' ,dirname( __FILE__ ).'/inc/');
 
 define('FI_CORE_JS' ,plugins_url( 'assets/js/', __FILE__ ));
 

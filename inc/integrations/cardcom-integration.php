@@ -7,12 +7,12 @@ use ElementorPro\Modules\Forms\Classes\Form_Record;
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class CEFI_CC extends Action_Base {
+class FromIntegration_CardCom extends Action_Base {
 
 	private $ajax_handler;
 	
 	public function get_name() {
-		return 'cefi_cc';
+		return 'fi_cardcom';
 	}
 
 	public function get_label() {
@@ -31,7 +31,7 @@ class CEFI_CC extends Action_Base {
 		);
 		
 		$widget->add_control(
-			'cefi_cc_terminal',
+			'fi_cc_terminal',
 			[
 				'label' => __( 'Terminal Number', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
@@ -40,7 +40,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_username',
+			'fi_cc_username',
 			[
 				'label' => __( 'Username', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
@@ -49,7 +49,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_operation',
+			'fi_cc_operation',
 			[
 				'label' => __( 'Operation', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
@@ -61,7 +61,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_lang',
+			'fi_cc_lang',
 			[
 				'label' => __( 'Language', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
@@ -76,7 +76,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_coin',
+			'fi_cc_coin',
 			[
 				'label' => __( 'Coin', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
@@ -99,7 +99,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_price',
+			'fi_cc_price',
 			[
 				'label' => __( 'Price', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
@@ -114,7 +114,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_product_name',
+			'fi_cc_product_name',
 			[
 				'label' => __( 'Product Name', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
@@ -124,7 +124,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_successurl',
+			'fi_cc_successurl',
 			[
 				'label' => __( 'Success URL', 'elementor-pro' ),
 				'type' => Controls_Manager::URL,
@@ -138,7 +138,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_errorurl',
+			'fi_cc_errorurl',
 			[
 				'label' => __( 'Error URL', 'elementor-pro' ),
 				'type' => Controls_Manager::URL,
@@ -152,7 +152,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_createinvoice',
+			'fi_cc_createinvoice',
 			[
 				'label' => __( 'Create Invoice', 'elementor-pro' ),
 				'type' => Controls_Manager::SWITCHER,
@@ -165,7 +165,7 @@ class CEFI_CC extends Action_Base {
 		);
 
 		$widget->add_control(
-			'cefi_cc_redirect',
+			'fi_cc_redirect',
 			[
 				'label' => __( 'Redirect?', 'elementor-pro' ),
 				'type' => Controls_Manager::SWITCHER,
@@ -190,7 +190,7 @@ class CEFI_CC extends Action_Base {
 		$subscriber = $this->create_integration_object( $record );
 		$basic_fields = array_filter( $subscriber );
 
-		if($settings['cefi_cc_terminal'] != '' && $settings['cefi_cc_username'] != '' && $settings['cefi_cc_price'] != ''){
+		if($settings['fi_cc_terminal'] != '' && $settings['fi_cc_username'] != '' && $settings['fi_cc_price'] != ''){
 			$post_response = $this->post( $basic_fields );
 		}
 
@@ -206,17 +206,17 @@ class CEFI_CC extends Action_Base {
 			$data['data'][$key] = $subscriber['value'];
 		}
 		// form settings
-        $data['TerminalNumber'] = $settings['cefi_cc_terminal'];
-		$data['UserName'] = $settings['cefi_cc_username'];
-		$data['Operation'] = $settings['cefi_cc_operation'];
-		$data['Languge'] = $settings['cefi_cc_lang'];
-		$data['coin'] = $settings['cefi_cc_coin'];
-		$data['price'] = $settings['cefi_cc_price'];
-		$data['product_name'] = $settings['cefi_cc_product_name'];
-		$data['SuccessRedirectUrl'] = $settings['cefi_cc_successurl']['url'];
-		$data['ErrorRedirectUrl'] = $settings['cefi_cc_errorurl']['url'];
-		$data['CreateInvoice'] = $settings['cefi_cc_createinvoice'];
-		$data['redirect'] = $settings['cefi_cc_redirect'];
+        $data['TerminalNumber'] = $settings['fi_cc_terminal'];
+		$data['UserName'] = $settings['fi_cc_username'];
+		$data['Operation'] = $settings['fi_cc_operation'];
+		$data['Languge'] = $settings['fi_cc_lang'];
+		$data['coin'] = $settings['fi_cc_coin'];
+		$data['price'] = $settings['fi_cc_price'];
+		$data['product_name'] = $settings['fi_cc_product_name'];
+		$data['SuccessRedirectUrl'] = $settings['fi_cc_successurl']['url'];
+		$data['ErrorRedirectUrl'] = $settings['fi_cc_errorurl']['url'];
+		$data['CreateInvoice'] = $settings['fi_cc_createinvoice'];
+		$data['redirect'] = $settings['fi_cc_redirect'];
         
 		return $data;
 	}
@@ -340,5 +340,5 @@ class CEFI_CC extends Action_Base {
 	}
 }
 
-	\ElementorPro\Modules\Forms\Module::instance()->add_form_action( 'cefi_cc', new CEFI_CC() );
+\ElementorPro\Modules\Forms\Module::instance()->add_form_action( 'fi_cardcom', new FromIntegration_CardCom() );
 
