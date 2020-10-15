@@ -3,7 +3,7 @@
 Plugin Name: Integrations for Elementor Forms 
 Plugin URI: https://github.com/YarinAyash1/cardcom-elementor-forms-integration
 Description: Forms Integrations
-Version: 0.0.1
+Version: 1.0.0
 Author: Yarin Ayash
 Author URI: https://yarinayash.com
 Text Domain: from-integrations
