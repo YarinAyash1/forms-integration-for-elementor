@@ -34,8 +34,6 @@ class Forms_Integration {
 			'js'	=> plugins_url( 'assets/js/', __FILE__ )
 		);
 		
-		add_action('wp_enqueue_scripts', array( $this, 'register_scripts_styles' ));
-		add_action( 'elementor_pro/init', array( $this, 'register_integrations' ));
 		$this->integrations = array(
 			'cardcom' => array(
 				'filename' => 'cardcom-integration'
@@ -44,6 +42,9 @@ class Forms_Integration {
 				'filename' => '019-integration'
 			)
 		);
+
+		add_action('wp_enqueue_scripts', array( $this, 'register_scripts_styles' ));
+		add_action( 'elementor_pro/init', array( $this, 'register_integrations' ));
 	}
 
 	public function register_scripts_styles(){
