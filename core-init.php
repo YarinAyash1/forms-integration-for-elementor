@@ -11,23 +11,52 @@
 
 if ( ! defined( 'WPINC' ) ) {die;} // end if
 
-// Define Our Constants
-define('FI_CORE_INC' ,dirname( __FILE__ ).'/inc/');
+class Forms_Integration {
 
-define('FI_CORE_JS' ,plugins_url( 'assets/js/', __FILE__ ));
+	public $settings;
+	public $integrations;
+    /**
+     *  __construct
+     *
+     *  This function will setup the class functionality
+     *
+     * @type    function
+     * @since    1.0.0
+     *
+     * @param    void
+     *
+     * @return    void
+     */
+	public function __construct(){
+		$this->settings = array(
+			'version' => '1.0.0',
+			'integrations' 	=> dirname( __FILE__ ).'/inc/integrations/',
+			'js'	=> plugins_url( 'assets/js/', __FILE__ )
+		);
+		
+		add_action('wp_enqueue_scripts', array( $this, 'register_scripts_styles' ));
+		add_action( 'elementor_pro/init', array( $this, 'register_integrations' ));
+		$this->integrations = array(
+			'cardcom' => array(
+				'filename' => 'cardcom-integration'
+			),
+			'019' => array(
+				'filename' => '019-integration'
+			)
+		);
+	}
 
-/*
-*  Includes
-*/ 
-    
-// Load the Integrations
-if ( file_exists( FI_CORE_INC . 'load-integrations.php' ) ) {
-	require_once FI_CORE_INC . 'load-integrations.php';
-} 
+	public function register_scripts_styles(){
+		wp_enqueue_script('fi-core', $this->settings['js'] . 'integrations-from-core.js', 'jquery', time(), true);
+	}
 
-// Load the JS File
-function cefi_register_core_js(){
-	// Register Core Plugin JS	
-	wp_enqueue_script('core', FI_CORE_JS . 'integrations-from-core.js','jquery',time(),true);
-};
-add_action( 'wp_enqueue_scripts', 'cefi_register_core_js' );    
+	public function register_integrations(){
+		foreach($this->integrations as $integration){
+			if ( file_exists( $this->settings['integrations'] . $integration['filename'].'.php' ) ) {
+				require_once($this->settings['integrations'] . $integration['filename'].'.php');
+			}
+		}
+	}
+}
+
+new Forms_Integration();
